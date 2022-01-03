@@ -17,10 +17,9 @@ class MainController extends AbstractController
      */
     function controller(Request $request, EntityManagerInterface $em, HttpClientInterface $client){
         /** @var Site $site */
-        $site = $this->getDoctrine()->getRepository(Site::class)->findOneBy(["host" => $request->getHost()]);
-        if($site == null){
-            $site = new Site();
-            $site->setHost("127.0.0.1")->setWebflowAddress("jannis6023.webflow.io");
+        $site = $em->getRepository(Site::class)->findOneBy(["host" => $request->getHost()]);
+        if($site->getRedirectURL() != null){
+            return $this->redirect($site->getRedirectURL());
         }
         $response = $client->request($request->getMethod(), "https://" . $site->getWebflowAddress() . "/");
         $data = $response->getContent();
@@ -33,10 +32,9 @@ class MainController extends AbstractController
      */
     function controllerROUTE($route, Request $request, EntityManagerInterface $em, HttpClientInterface $client){
         /** @var Site $site */
-        $site = $this->getDoctrine()->getRepository(Site::class)->findOneBy(["host" => $request->getHost()]);
-        if($site == null){
-            $site = new Site();
-            $site->setHost("127.0.0.1")->setWebflowAddress("jannis6023.webflow.io");
+        $site = $em->getRepository(Site::class)->findOneBy(["host" => $request->getHost()]);
+        if($site->getRedirectURL() != null){
+            return $this->redirect($site->getRedirectURL() . "/" .$route);
         }
         $response = $client->request($request->getMethod(), "https://" . $site->getWebflowAddress() . "/" . $route);
         $data = $response->getContent();

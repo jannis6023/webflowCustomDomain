@@ -27,6 +27,11 @@ class Site
      */
     private $webflowAddress;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $redirectURL;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Site
     public function setWebflowAddress(string $webflowAddress): self
     {
         $this->webflowAddress = $webflowAddress;
+
+        return $this;
+    }
+
+    public function getRedirectURL(): ?string
+    {
+        return $this->redirectURL;
+    }
+
+    public function setRedirectURL(?string $redirectURL): self
+    {
+        $this->redirectURL = $redirectURL;
 
         return $this;
     }
